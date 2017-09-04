@@ -1,0 +1,173 @@
+on enable-gpu-tweaks
+    write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+    write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/min_pwrlevel 5
+    write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/max_gpuclk 578000000
+
+    setprop debug.sf.hw 1
+    setprop debug.egl.hw 1
+    setprop debug.composition.type gpu
+    setprop debug.mdpcomp.4k2kSplit 1
+    setprop debug.mdpcomp.logs 0
+    setprop debug.enabletr true
+    setprop debug.qctwa.preservebuf 1
+    setprop debug.qctwa.statusbar 1
+    setprop debug.qc.hardware true
+    setprop debug.egl.swapinterval -60
+    setprop debug.egl.profiler 0
+
+on enable-display-tweaks
+    write /sys/class/leds/lcd-backlight/max_brightness 255
+
+    write /sys/devices/platform/kcal_ctrl.0/kcal_enable 1
+    write /sys/devices/platform/kcal_ctrl.0/kcal "256 256 256"
+    write /sys/devices/platform/kcal_ctrl.0/kcal_min 220
+    write /sys/devices/platform/kcal_ctrl.0/kcal_sat 260
+    write /sys/devices/platform/kcal_ctrl.0/kcal_val 255
+    write /sys/devices/platform/kcal_ctrl.0/kcal_cont 256
+
+    # Assertive Display
+    setprop ro.qcom.ad 1
+    setprop ro.qcom.ad.sensortype 1
+    setprop ro.qcom.ad.calib.data /system/media/display/calib.cfg
+
+    # Black and dynamic vibrance settings for Qualcomm
+    setprop ro.qualcomm.cabl 1
+    setprop hw.cabl.level auto
+    setprop persist.qcom.cabl.video_only 1
+
+on enable-mem-tweaks
+
+    write /sys/devices/qcom,mincpubw.44/devfreq/qcom,mincpubw.44/governor cpufreq
+
+    write /sys/devices/qcom,memlat-cpu.41/devfreq/qcom,memlat-cpu.41/governor mem_latency
+    write /sys/devices/qcom,memlat-cpu.41/devfreq/qcom,memlat-cpu.41/polling_interval 10
+    write /sys/devices/qcom,memlat-cpu.41/devfreq/qcom,memlat-cpu.41/freq_thresh_mhz 800
+    write /sys/devices/qcom,memlat-cpu.41/devfreq/qcom,memlat-cpu.41/mult_factor 8
+    write /sys/devices/qcom,memlat-cpu.41/devfreq/qcom,memlat-cpu.41/ratio_ceil 10
+
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/governor bw_hwmon
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/min_freq 381
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/mbps_zones "762 3509 6103 7102"
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/bw_step 400
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/decay_rate 100
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/guard_band_mbps 0
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/io_percent 16
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/low_power_io_percent 33
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/low_power_delay 20
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/low_power_ceil_mbps 0
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/up_scale 220
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/hist_memory 20
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/hyst_length 10
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/idle_mbps 1600
+    write /sys/devices/qcom,cpubw.43/devfreq/qcom,cpubw.43/bw_hwmon/sample_ms 500
+
+    write /sys/devices/0.qcom,cache/devfreq/0.qcom,cache/governor cpufreq
+
+on enable-cpu-tweaks
+    write /sys/module/cpu_boost/parameters/load_based_syncs Y
+    write /sys/module/cpu_boost/parameters/sync_threshold 0
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:652800 1:0 2:0 3:0"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 400
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    restorecon_recursive /sys/devices/system/cpu/cpufreq/interactive
+
+    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay "19000 900000:99000 1500000:59000"
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 900000
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "90 300000:40 700000:50 960000:60 1200000:70 1400000:80 1700000:90 1900000:97"
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 19000
+    write /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor 0
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 29000
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_slack 29000
+    write /sys/devices/system/cpu/cpufreq/interactive/above_optimal_max_freq_delay 29000
+    write /sys/devices/system/cpu/cpufreq/interactive/optimal_max_freq 960000
+    write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpufreq/interactive/sync_freq 1728000
+    write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_freq 1267200
+    write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_load 50
+
+    write /sys/devices/system/cpu/cpufreq/interactive/high_grid_load 47
+    write /sys/devices/system/cpu/cpufreq/interactive/high_grid_step 14
+    write /sys/devices/system/cpu/cpufreq/interactive/middle_grid_load 33
+    write /sys/devices/system/cpu/cpufreq/interactive/middle_grid_step 7
+    write /sys/devices/system/cpu/cpufreq/interactive/is_grid 1
+
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    write /sys/module/msm_thermal/core_control/enabled 1
+
+on enable-lmk-tweaks
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
+
+on misc-setup
+    setprop persist.speaker.prot.enable true
+    setprop persist.cne.feature 1
+    setprop vidc.debug.level 1
+    setprop persist.qcril.disable_retry true
+
+    setprop profiler.force_disable_err_rpt 1
+    setprop profiler.force_disable_ulog 1
+    setprop ro.kernel.android.checkjni 0
+    setprop ro.kernel.checkjni 0
+    setprop ro.config.nocheckin 1
+
+on disable-extra-logging
+    write /sys/devices/fe12f000.slim/debug_mask 0
+    write /sys/module/smd/parameters/debug_mask 0
+    write /sys/module/smem/parameters/debug_mask 0
+    write /sys/module/rpm_regulator_smd/parameters/debug_mask 0
+    write /sys/module/ipc_router/parameters/debug_mask 0
+    write /sys/module/event_timer/parameters/debug_mask 0
+    write /sys/module/alarm/parameters/debug_mask 0
+    write /sys/module/smp2p/parameters/debug_mask 0
+    write /sys/module/rpm_smd/parameters/debug_mask 0
+    write /sys/module/smd_pkt/parameters/debug_mask 0
+    write /sys/module/msm_serial_hs_lge/parameters/debug_mask 0
+    write /sys/module/xt_qtaguid/parameters/debug_mask 0
+    write /sys/module/qpnp_regulator/parameters/debug_mask 0
+    write /sys/module/binder/parameters/debug_mask 0
+    write /sys/module/msm_show_resume_irq/parameters/debug_mask 0
+    write /sys/module/alarm_dev/parameters/debug_mask 0
+    write /sys/module/mpm_of/parameters/debug_mask 0
+    write /sys/module/msm_pm/parameters/debug_mask 0
+    write /sys/module/spm_v2/parameters/debug_mask 0
+    write /sys/module/lpm_levels/parameters/debug_mask 0
+    write /sys/module/ipc_router_smd_xprt/parameters/debug_mask 0
+    write /sys/module/lge_touch_core/parameters/debug_mask 0
+
+on enable-cpu-hotplug
+    chown root system /sys/module/intelli_plug/parameters/intelli_plug_active
+    chmod 0664 /sys/module/intelli_plug/parameters/intelli_plug_active
+    chown root system /sys/module/intelli_plug/parameters/touch_boost_active
+    chmod 0664 /sys/module/intelli_plug/parameters/touch_boost_active
+    chown root system /sys/module/intelli_plug/parameters/screen_off_max
+    chmod 0664 /sys/module/intelli_plug/parameters/screen_off_max
+    chown root system /sys/module/intelli_plug/parameters/nr_run_profile_sel
+    chmod 0664 /sys/module/intelli_plug/parameters/nr_run_profile_sel
+    chown root system /sys/module/intelli_plug/parameters/nr_run_hysteresis
+    chmod 0664 /sys/module/intelli_plug/parameters/nr_run_hysteresis
+    chown root system /sys/module/intelli_plug/parameters/cpu_nr_run_threshold
+    chmod 0664 /sys/module/intelli_plug/parameters/cpu_nr_run_threshold
+    write /sys/module/intelli_plug/parameters/intelli_plug_active 1
+    write /sys/module/intelli_plug/parameters/touch_boost_active 0
+    write /sys/module/intelli_plug/parameters/screen_off_max 300000
+    write /sys/module/intelli_plug/parameters/nr_run_profile_sel 2
+    write /sys/module/intelli_plug/parameters/nr_run_hysteresis 8
+    write /sys/module/intelli_plug/parameters/cpu_nr_run_threshold 100
+
+on enable-low-power
+    trigger enable-mem-tweaks
+    trigger enable-cpu-tweaks
+    trigger enable-lmk-tweaks
+
+on boot
+    trigger disable-extra-logging
+    trigger misc-setup
+    trigger enable-display-tweaks
+    trigger enable-gpu-tweaks
+    trigger enable-mem-tweaks
+    trigger enable-cpu-hotplug
