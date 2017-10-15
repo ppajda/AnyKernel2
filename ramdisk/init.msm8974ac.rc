@@ -114,6 +114,8 @@ on misc-setup
     setprop ro.kernel.android.checkjni 0
     setprop ro.kernel.checkjni 0
     setprop ro.config.nocheckin 1
+    
+    setprop logcat.live disable
 
 on disable-extra-logging
     write /sys/devices/fe12f000.slim/debug_mask 0
