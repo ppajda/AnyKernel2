@@ -141,6 +141,14 @@ on disable-extra-logging
     write /sys/module/lge_touch_core/parameters/debug_mask 0
 
 on property:init.svc.mpdecision=stopped
+    chmod 0644 /sys/devices/system/cpu/cpu0/online
+    chmod 0644 /sys/devices/system/cpu/cpu1/online
+    chmod 0644 /sys/devices/system/cpu/cpu2/online
+    chmod 0644 /sys/devices/system/cpu/cpu3/online
+    write /sys/devices/system/cpu/cpu0/online 1
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
     trigger enable-cpu-hotplug
     
 on enable-cpu-hotplug
