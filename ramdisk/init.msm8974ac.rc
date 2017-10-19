@@ -24,19 +24,16 @@ on enable-display-tweaks
     write /sys/devices/platform/kcal_ctrl.0/kcal_sat 260
     write /sys/devices/platform/kcal_ctrl.0/kcal_val 255
     write /sys/devices/platform/kcal_ctrl.0/kcal_cont 256
-
     # Assertive Display
     setprop ro.qcom.ad 1
     setprop ro.qcom.ad.sensortype 1
     setprop ro.qcom.ad.calib.data /system/media/display/calib.cfg
-
     # Black and dynamic vibrance settings for Qualcomm
     setprop ro.qualcomm.cabl 1
     setprop hw.cabl.level auto
     setprop persist.qcom.cabl.video_only 1
 
 on enable-mem-tweaks
-
     write /sys/devices/qcom,mincpubw.44/devfreq/qcom,mincpubw.44/governor cpufreq
 
     write /sys/devices/qcom,memlat-cpu.41/devfreq/qcom,memlat-cpu.41/governor mem_latency
@@ -65,15 +62,18 @@ on enable-mem-tweaks
 
 on enable-cpu-tweaks
     write /sys/module/cpu_boost/parameters/sync_threshold 0
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:883200 1:0 2:960000 3:0"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 90
-
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 1:0 2:883200 3:0"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 80
+    write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    write /sys/module/msm_thermal/core_control/enabled 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
     restorecon_recursive /sys/devices/system/cpu/cpufreq/interactive
-
     write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay 0
     write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 900000
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1497600
     write /sys/devices/system/cpu/cpufreq/interactive/target_loads "80 300000:40 700000:50 960000:60 1200000:70 1400000:80 1700000:90 1900000:97"
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 29000
     write /sys/devices/system/cpu/cpufreq/interactive/sampling_down_factor 0
@@ -85,18 +85,11 @@ on enable-cpu-tweaks
     write /sys/devices/system/cpu/cpufreq/interactive/sync_freq 0
     write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_freq 1958400
     write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_load 50
-
     write /sys/devices/system/cpu/cpufreq/interactive/high_grid_load 47
     write /sys/devices/system/cpu/cpufreq/interactive/high_grid_step 14
     write /sys/devices/system/cpu/cpufreq/interactive/middle_grid_load 33
     write /sys/devices/system/cpu/cpufreq/interactive/middle_grid_step 7
     write /sys/devices/system/cpu/cpufreq/interactive/is_grid 1
-
-    write /sys/module/msm_thermal/core_control/enabled 0
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
-    write /sys/module/msm_thermal/core_control/enabled 1
 
 on enable-lmk-tweaks
     write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
