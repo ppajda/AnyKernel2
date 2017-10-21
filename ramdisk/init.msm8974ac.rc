@@ -1,8 +1,8 @@
 on enable-gpu-tweaks
-    write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
-    write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/min_pwrlevel 5
-    write /sys/devices/fdb00000.qcom,kgsl-3d0/kgsl/kgsl-3d0/max_gpuclk 578000000
-
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+    write /sys/class/kgsl/kgsl-3d0/min_pwrlevel 6
+    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 620000000
+    
     setprop debug.sf.hw 1
     setprop debug.egl.hw 1
     setprop debug.composition.type gpu
@@ -62,7 +62,7 @@ on enable-mem-tweaks
 
 on enable-cpu-tweaks
     write /sys/module/cpu_boost/parameters/sync_threshold 0
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 1:0 2:883200 3:0"
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:883200 1:422400 2:422400 3:883200"
     write /sys/module/cpu_boost/parameters/input_boost_ms 80
     write /sys/module/msm_thermal/core_control/enabled 0
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
@@ -145,24 +145,18 @@ on property:init.svc.mpdecision=stopped
     trigger enable-cpu-hotplug
     
 on enable-cpu-hotplug
-    chown root system /sys/module/intelli_plug/parameters/intelli_plug_active
-    chmod 0664 /sys/module/intelli_plug/parameters/intelli_plug_active
-    chown root system /sys/module/intelli_plug/parameters/touch_boost_active
-    chmod 0664 /sys/module/intelli_plug/parameters/touch_boost_active
-    chown root system /sys/module/intelli_plug/parameters/screen_off_max
-    chmod 0664 /sys/module/intelli_plug/parameters/screen_off_max
-    chown root system /sys/module/intelli_plug/parameters/nr_run_profile_sel
-    chmod 0664 /sys/module/intelli_plug/parameters/nr_run_profile_sel
-    chown root system /sys/module/intelli_plug/parameters/nr_run_hysteresis
-    chmod 0664 /sys/module/intelli_plug/parameters/nr_run_hysteresis
-    chown root system /sys/module/intelli_plug/parameters/cpu_nr_run_threshold
-    chmod 0664 /sys/module/intelli_plug/parameters/cpu_nr_run_threshold
-    write /sys/module/intelli_plug/parameters/intelli_plug_active 1
-    write /sys/module/intelli_plug/parameters/touch_boost_active 0
-    write /sys/module/intelli_plug/parameters/screen_off_max 300000
-    write /sys/module/intelli_plug/parameters/nr_run_profile_sel 2
-    write /sys/module/intelli_plug/parameters/nr_run_hysteresis 8
-    write /sys/module/intelli_plug/parameters/cpu_nr_run_threshold 100
+    write /sys/devices/system/cpu/sched_mc_power_savings
+    write /sys/kernel/msm_mpdecision/conf/delay 40
+    write /sys/kernel/msm_mpdecision/conf/pause 5000
+    write /sys/kernel/msm_mpdecision/conf/suspend_defer_time 10
+    write /sys/kernel/msm_mpdecision/conf/startdelay 100
+    write /sys/module/msm_mpdecision/down_lock_duration 400
+    write /sys/kernel/msm_mpdecision/conf/min_cpus_online 2
+    write /sys/kernel/msm_mpdecision/conf/max_cpus_online 4
+    write /sys/kernel/msm_mpdecision/conf/max_cpus_online_susp 1
+    write /sys/kernel/msm_mpdecision/conf/idle_freq 1728000
+    write /sys/kernel/msm_mpdecision/conf/hotplug_suspend 1
+    write /sys/kernel/msm_mpdecision/conf/enabled 1
 
 on enable-low-power
     trigger enable-mem-tweaks
