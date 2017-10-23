@@ -145,18 +145,11 @@ on property:init.svc.mpdecision=stopped
     trigger enable-cpu-hotplug
     
 on enable-cpu-hotplug
-    write /sys/devices/system/cpu/sched_mc_power_savings
-    write /sys/kernel/msm_mpdecision/conf/delay 40
-    write /sys/kernel/msm_mpdecision/conf/pause 5000
-    write /sys/kernel/msm_mpdecision/conf/suspend_defer_time 10
-    write /sys/kernel/msm_mpdecision/conf/startdelay 100
-    write /sys/module/msm_mpdecision/down_lock_duration 400
-    write /sys/kernel/msm_mpdecision/conf/min_cpus_online 2
-    write /sys/kernel/msm_mpdecision/conf/max_cpus_online 4
-    write /sys/kernel/msm_mpdecision/conf/max_cpus_online_susp 1
-    write /sys/kernel/msm_mpdecision/conf/idle_freq 1728000
-    write /sys/kernel/msm_mpdecision/conf/hotplug_suspend 1
-    write /sys/kernel/msm_mpdecision/conf/enabled 1
+    write /sys/kernel/autosmp/conf/cpufreq_down 50
+    write /sys/kernel/autosmp/conf/cpufreq_up 75
+    write /sys/kernel/autosmp/conf/cycle_down 1
+    write /sys/kernel/autosmp/conf/cycle_up 2
+    write /sys/kernel/autosmp/conf/delay 30
 
 on enable-low-power
     trigger enable-mem-tweaks
