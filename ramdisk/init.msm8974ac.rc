@@ -100,13 +100,12 @@ on misc-setup
     setprop persist.cne.feature 1
     setprop vidc.debug.level 1
     setprop persist.qcril.disable_retry true
-
+    setprop sys.use_fifo_ui 1
     setprop profiler.force_disable_err_rpt 1
     setprop profiler.force_disable_ulog 1
     setprop ro.kernel.android.checkjni 0
     setprop ro.kernel.checkjni 0
     setprop ro.config.nocheckin 1
-    
     setprop logcat.live disable
 
 on disable-extra-logging
